@@ -1,0 +1,196 @@
+import React from 'react';
+import { InfoHeader } from 'components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+   faPlusCircle,
+   faInfoCircle,
+   faMinusCircle,
+   faEdit,
+} from '@fortawesome/free-solid-svg-icons';
+import { Education } from '@/types/data';
+import { v4 as uuid } from 'uuid';
+
+const EducationInformation: React.FC = () => {
+   const [isOpen, setIsOpen] = React.useState(false);
+   const [showAddForm, setShowAddForm] = React.useState(false);
+   const [educationList, setEducationList] = React.useState<Education[]>([]);
+
+   //inputs
+   const [title, setTitle] = React.useState('');
+   const [level, setLevel] = React.useState('');
+   const [school, setSchool] = React.useState('');
+   const [grade, setGrade] = React.useState('');
+   const [startDate, setStartDate] = React.useState('');
+   const [endDate, setEndDate] = React.useState('');
+
+   const toggleOpen = () => setIsOpen(!isOpen);
+   const openForm = () => setShowAddForm(true);
+   const closeForm = () => setShowAddForm(false);
+
+   const clearFields = () => {
+      setTitle('');
+      setLevel('');
+      setSchool('');
+      setGrade('');
+      setStartDate('');
+      setEndDate('');
+   };
+
+   const saveEducation = () => {
+      const condition =
+         title.trim().length > 0 &&
+         level.trim().length > 0 &&
+         school.trim().length > 0 &&
+         grade.trim().length > 0;
+
+      if (condition) {
+         const newEducation: Education = {
+            id: uuid().slice(0, 8),
+            title: title.trim(),
+            level: level.trim(),
+            school: school.trim(),
+            grade: grade.trim(),
+            startDate: startDate.trim(),
+            endDate: endDate.trim(),
+         };
+
+         setEducationList([...educationList, newEducation]);
+         clearFields();
+      }
+
+      closeForm();
+   };
+
+   return (
+      <div className="border border-gray-300 rounded-md">
+         <InfoHeader
+            title="Education"
+            toggleOpen={toggleOpen}
+            isOpen={isOpen}
+         />
+
+         <div className={`px-4 pb-4 ${isOpen ? 'block' : 'hidden'}`}>
+            <div className="mb-4 flex gap-x-[3.5%] gap-y-3 flex-wrap">
+               {educationList.map(item => (
+                  <div className="bg-gray-200 w-[48%] flex items-center py-2 px-2 rounded-[5px]">
+                     <div>
+                        <p>{item.title}</p>
+                     </div>
+                     <div className="ml-auto flex ">
+                        <button onClick={() => {}}>
+                           <FontAwesomeIcon
+                              icon={faMinusCircle}
+                              className="mr-2 "
+                           />
+                        </button>
+                        <button onClick={() => {}}>
+                           <FontAwesomeIcon
+                              icon={faEdit}
+                              className="text-green-500"
+                           />
+                        </button>
+                     </div>
+                  </div>
+               ))}
+            </div>
+            <div className={`mb-5 ${showAddForm ? 'block' : 'hidden'}`}>
+               {/**Form */}
+               <div className="mb-2">
+                  <label htmlFor="title">Title</label>
+                  <br />
+                  <input
+                     type="text"
+                     id="title"
+                     className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                     value={title}
+                     onChange={e => setTitle(e.target.value)}
+                  />
+               </div>
+               <div className="mb-2">
+                  <label htmlFor="level">Level</label>
+                  <br />
+                  <select
+                     id="level"
+                     className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                     value={level}
+                     onChange={e => setLevel(e.target.value)}
+                  >
+                     <option value="">Select Level</option>
+                     <option value="phd">PHD</option>
+                     <option value="master">Masters</option>
+                     <option value="degree">Degree</option>
+                     <option value="diploma">Diploma</option>
+                     <option value="certificate">Certificate</option>
+                  </select>
+               </div>
+
+               <div className="mb-2">
+                  <label htmlFor="school">School</label>
+                  <input
+                     type="text"
+                     id="school"
+                     className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                     value={school}
+                     onChange={e => setSchool(e.target.value)}
+                  />
+               </div>
+               <div className="mb-2">
+                  <label htmlFor="grade">Grade</label>
+                  <input
+                     type="text"
+                     id="grade"
+                     className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                     value={grade}
+                     onChange={e => setGrade(e.target.value)}
+                  />
+               </div>
+
+               <div className="flex gap-x-2">
+                  <div className="w-1/2">
+                     <label htmlFor="start-date">Start date</label>
+                     <input
+                        type={'date'}
+                        id-="start-date"
+                        className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                        value={startDate}
+                        onChange={e => setStartDate(e.target.value)}
+                     />
+                  </div>
+                  <div className="w-1/2">
+                     <label htmlFor="end-date">End date</label>
+                     <br />
+                     <input
+                        type={'date'}
+                        id="end-date"
+                        className="w-full bg-gray-200 py-1 px-2 rounded-[5px]"
+                        value={endDate}
+                        onChange={e => setEndDate(e.target.value)}
+                     />
+                     <p className="text-sm text-gray-500">
+                        <FontAwesomeIcon
+                           icon={faInfoCircle}
+                           className={'text-[13px] mr-2'}
+                        />
+                        <span>Leave empty if ongoing</span>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div className="flex justify-center items-center">
+               <button
+                  onClick={showAddForm ? saveEducation : openForm}
+                  className="border border-gray-400 rounded-[4px] w-1/4 py-1"
+               >
+                  <FontAwesomeIcon
+                     className="text-purple-400 mr-2"
+                     icon={faPlusCircle}
+                  />
+                  <span>Add</span>
+               </button>
+            </div>
+         </div>
+      </div>
+   );
+};
+
+export { EducationInformation };
