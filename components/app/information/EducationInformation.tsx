@@ -7,13 +7,19 @@ import {
    faMinusCircle,
    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
-import { Education } from '@/types/data';
+import { Education, DataContextType } from '@/types/data';
 import { v4 as uuid } from 'uuid';
+import { DataContext } from 'context/DataContext';
 
 const EducationInformation: React.FC = () => {
+   const { educationList, setEducationList } = React.useContext(
+      DataContext
+   ) as DataContextType;
+
    const [isOpen, setIsOpen] = React.useState(false);
    const [showAddForm, setShowAddForm] = React.useState(false);
-   const [educationList, setEducationList] = React.useState<Education[]>([]);
+   const [editMode, setEditMode] = React.useState(false);
+   const [editedItemId, setEditedItemId] = React.useState('');
 
    //inputs
    const [title, setTitle] = React.useState('');
@@ -34,6 +40,13 @@ const EducationInformation: React.FC = () => {
       setGrade('');
       setStartDate('');
       setEndDate('');
+   };
+
+   const hardReset = () => {
+      clearFields();
+      setEditMode(false);
+      setEditedItemId('');
+      closeForm();
    };
 
    const saveEducation = () => {
@@ -61,6 +74,50 @@ const EducationInformation: React.FC = () => {
       closeForm();
    };
 
+   const deleteEducation = (id: string) => {
+      const newList = educationList.filter(item => item.id !== id);
+      setEducationList(newList);
+   };
+
+   const editEducation = (id: string) => {
+      const selecteEducation = educationList.find(item => item.id === id);
+
+      if (selecteEducation) {
+         // populate the fields
+         setTitle(selecteEducation.title);
+         setLevel(selecteEducation.level);
+         setSchool(selecteEducation.school);
+         setGrade(selecteEducation.grade);
+         setStartDate(selecteEducation.startDate);
+         setEndDate(selecteEducation.endDate);
+
+         // set edit Mode on
+         setEditMode(true);
+         setEditedItemId(selecteEducation.id);
+
+         // open form
+         openForm();
+      }
+   };
+   const saveEditedEducation = () => {
+      const newList: Education[] = [...educationList];
+
+      newList.forEach(item => {
+         if (item.id === editedItemId) {
+            item.title = title;
+            item.level = level;
+            item.school = school;
+            item.grade = grade;
+            item.startDate = startDate;
+            item.endDate = endDate;
+         }
+      });
+
+      setEducationList(newList);
+
+      hardReset();
+   };
+
    return (
       <div className="border border-gray-300 rounded-md">
          <InfoHeader
@@ -77,13 +134,13 @@ const EducationInformation: React.FC = () => {
                         <p>{item.title}</p>
                      </div>
                      <div className="ml-auto flex ">
-                        <button onClick={() => {}}>
+                        <button onClick={() => deleteEducation(item.id)}>
                            <FontAwesomeIcon
                               icon={faMinusCircle}
                               className="mr-2 "
                            />
                         </button>
-                        <button onClick={() => {}}>
+                        <button onClick={() => editEducation(item.id)}>
                            <FontAwesomeIcon
                               icon={faEdit}
                               className="text-green-500"
@@ -178,15 +235,39 @@ const EducationInformation: React.FC = () => {
             </div>
             <div className="flex justify-center items-center">
                <button
-                  onClick={showAddForm ? saveEducation : openForm}
+                  onClick={
+                     showAddForm
+                        ? editMode
+                           ? saveEditedEducation
+                           : saveEducation
+                        : openForm
+                  }
                   className="border border-gray-400 rounded-[4px] w-1/4 py-1"
                >
-                  <FontAwesomeIcon
-                     className="text-purple-400 mr-2"
-                     icon={faPlusCircle}
-                  />
-                  <span>Add</span>
+                  {showAddForm ? (
+                     editMode ? (
+                        'Edit'
+                     ) : (
+                        'Save'
+                     )
+                  ) : (
+                     <>
+                        <FontAwesomeIcon
+                           className="text-purple-400 mr-2"
+                           icon={faPlusCircle}
+                        />
+                        <span>Add</span>
+                     </>
+                  )}
                </button>
+               {showAddForm && (
+                  <p
+                     onClick={hardReset}
+                     className="text-blue-500 ml-2 cursor-pointer"
+                  >
+                     Cancel
+                  </p>
+               )}
             </div>
          </div>
       </div>

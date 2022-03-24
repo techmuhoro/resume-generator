@@ -2,10 +2,16 @@ import React from 'react';
 import { InfoHeader } from '../../';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DataContextType } from '@/types/data';
+import { DataContext } from 'context/DataContext';
 
 const ObjectiveInformation: React.FC = () => {
+   const { objective, setObjective } = React.useContext(
+      DataContext
+   ) as DataContextType;
+
    const [isOpen, setIsOpen] = React.useState(false);
-   const [objective, setObjective] = React.useState('');
+   // const [objective, setObjective] = React.useState('');
 
    const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -26,6 +32,7 @@ const ObjectiveInformation: React.FC = () => {
                      rows={5}
                      className="bg-gray-200 rounded-md w-full p-2 text-lg"
                      placeholder="Objective"
+                     onChange={e => setObjective(e.target.value)}
                   ></textarea>
                </div>
             </div>

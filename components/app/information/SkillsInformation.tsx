@@ -6,12 +6,17 @@ import {
    faMinusCircle,
    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
-import { Skill } from '@/types/data';
+import { Skill, DataContextType } from '@/types/data';
 import { v4 as uuid } from 'uuid';
+import { DataContext } from 'context/DataContext';
 
 const SkillsInformation: React.FC = () => {
+   const { skillsList, setSkillsList } = React.useContext(
+      DataContext
+   ) as DataContextType;
+
    const [isOpen, setIsOpen] = React.useState(false);
-   const [skillsList, setSkillsList] = React.useState<Skill[]>([]);
+   // const [skillsList, setSkillsList] = React.useState<Skill[]>([]);
    const [showAddForm, setShowAddForm] = React.useState(false);
    const [skill, setSkill] = React.useState('');
    const [level, setLevel] = React.useState('');
@@ -41,7 +46,7 @@ const SkillsInformation: React.FC = () => {
       setEditedSkillId('');
    };
    const saveSkill = () => {
-      if (skill.trim().length > 1 && level.trim().length > 1) {
+      if (skill.trim().length > 1) {
          const newSkill: Skill = {
             id: uuid().slice(0, 8),
             name: skill.trim(),
@@ -93,9 +98,9 @@ const SkillsInformation: React.FC = () => {
             <div className="mb-4 flex gap-x-[3.5%] gap-y-3 flex-wrap">
                {/** list of skills */}
                {skillsList.map(skill => (
-                  <div className="bg-gray-200 w-[48%] flex items-center py-2 px-2 rounded-[5px]">
-                     <div>
-                        <p>{skill.name}</p>
+                  <div className=" bg-gray-200 w-[48%] flex items-center py-2 px-2 rounded-[5px]">
+                     <div className=" w-[80%]">
+                        <p className="truncate">{skill.name}</p>
                      </div>
                      <div className="ml-auto flex ">
                         <button onClick={() => removeSkill(skill.id)}>

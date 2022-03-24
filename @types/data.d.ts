@@ -41,6 +41,8 @@ export type Education = {
 };
 
 export type DataContextType = {
+   objective: string;
+   setObjective: React.Dispatch<React.SetStateAction<string>>;
    fname: string;
    setFname: React.Dispatch<React.SetStateAction<string>>;
    lname: string;
@@ -57,4 +59,14 @@ export type DataContextType = {
    setHobbiesList: React.Dispatch<React.SetStateAction<string[]>>;
    projectsList: Project[];
    setProjectList: React.Dispatch<React.SetStateAction<Project[]>>;
+   refereesList: Referee[];
+   setRefereesList: React.Dispatch<React.SetStateAction<Referee[]>>;
+   educationList: Education[];
+   setEducationList: React.Dispatch<React.SetStateAction<Education[]>>;
+   skillsList: Skill[];
+   setSkillsList: React.Dispatch<React.SetStateAction<Skill[]>>;
+   workList: Work[];
+   setWorkList: React.Dispatch<React.SetStateAction<Work[]>>;
+   socialList: SocialMedia[];
+   setSocialList: React.Dispatch<React.SetStateAction<SocialMedia[]>>;
 };

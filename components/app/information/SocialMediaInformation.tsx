@@ -7,17 +7,21 @@ import {
    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { SocialMedia } from '@/types/data';
+import { SocialMedia, DataContextType } from '@/types/data';
 import { v4 as uuid } from 'uuid';
+import { DataContext } from 'context/DataContext';
 
 const SocialMediaInformation: React.FC = () => {
+   const { socialList, setSocialList } = React.useContext(
+      DataContext
+   ) as DataContextType;
+
    const [isOpen, setIsOpen] = React.useState(false);
    const [showAddForm, setShowAddForm] = React.useState(false);
    const [editMode, setEditMode] = React.useState(false);
    const [editedSocialId, setEditedSocialId] = React.useState('');
    const [socialType, setSocialType] = useState('');
    const [socialLink, setSocialLink] = React.useState('');
-   const [socialList, setSocialList] = React.useState<SocialMedia[]>([]);
 
    const toggleOpen = () => setIsOpen(!isOpen);
    const openForm = () => setShowAddForm(true);

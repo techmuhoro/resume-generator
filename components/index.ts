@@ -12,6 +12,7 @@ export * from './app/DetailsEntry';
 export * from './app/ResumePage';
 export * from './app/InputFlex';
 export * from './app/Input';
+export * from './app/Pdf';
 
 export * from './app/information/Personalnformation';
 export * from './app/information/ProjectsInformation';

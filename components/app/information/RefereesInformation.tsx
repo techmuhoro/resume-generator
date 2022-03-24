@@ -5,16 +5,20 @@ import {
    faMinusCircle,
    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
-import { Referee } from '@/types/data';
+import { Referee, DataContextType } from '@/types/data';
 import { InfoHeader } from 'components';
 import { v4 as uuid } from 'uuid';
+import { DataContext } from 'context/DataContext';
 
 const RefereesInformation: React.FC = () => {
+   const value = React.useContext(DataContext) as DataContextType;
+   const { refereesList, setRefereesList } = value;
+
    const [isOpen, setIsOpen] = React.useState(false);
    const [showAddForm, setShowAddForm] = React.useState(false);
    const [editMode, setEditMode] = React.useState(true);
    const [editedReferreId, setEditedRefereeId] = React.useState('');
-   const [refereesList, setRefereesList] = React.useState<Referee[]>([]);
+   // const [refereesList, setRefereesList] = React.useState<Referee[]>([]);
    const [refereeName, setRefereeName] = React.useState('');
    const [refereeTitle, setRefereeTitle] = React.useState('');
    const [refereeMobile, setRefereeMobile] = React.useState('');

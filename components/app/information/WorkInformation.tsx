@@ -6,10 +6,15 @@ import {
    faMinusCircle,
    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
-import { Work } from '@/types/data';
+import { Work, DataContextType } from '@/types/data';
+import { DataContext } from 'context/DataContext';
 import { v4 as uuid } from 'uuid';
 
 const WorkInformation: React.FC = () => {
+   const { workList, setWorkList } = React.useContext(
+      DataContext
+   ) as DataContextType;
+
    const [isOpen, setIsOpen] = React.useState(false);
    const [showAddForm, setShowAddForm] = React.useState(false);
    const [editMode, setEditMode] = React.useState(false);
@@ -18,7 +23,6 @@ const WorkInformation: React.FC = () => {
    const [position, setPosition] = React.useState('');
    const [startDate, setStartDate] = React.useState('');
    const [endDate, setEndDate] = React.useState('');
-   const [workList, setWorkList] = React.useState<Work[]>([]);
 
    const toggleOpen = () => setIsOpen(!isOpen);
    const openForm = () => setShowAddForm(true);
