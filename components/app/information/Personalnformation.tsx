@@ -1,9 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { Input, InputFlex, InfoHeader } from '../../';
-import { DataContext } from '../../../context/DataContext';
-import { DataContextType } from '../../../@types/data';
+import React, { useState, useContext, useEffect } from 'react';
+import { Input, InputFlex, InfoHeader } from 'components';
+import { DataContext } from 'context/DataContext';
+import { DataContextType, LocalStorageData } from '@/types/data';
+import { useRouter } from 'next/router';
 
 const PersonalInformation: React.FC = () => {
+   const router = useRouter();
+   let { id: resumeId } = router.query;
+   // const resumeId = '35f5bf64';
    const value = useContext(DataContext);
    const {
       fname,
@@ -18,7 +22,36 @@ const PersonalInformation: React.FC = () => {
       setTitle,
       website,
       setWebsite,
+      syncStorage,
    } = value as DataContextType;
+
+   React.useEffect(() => {
+      // update local storage when below variables change
+      syncStorage();
+   }, [fname, lname, email, mobile, title, website]);
+
+   // useEffect(() => {
+   //    console.log('hello1');
+   //    if (resumeId) {
+   //       console.log('hello2');
+   //       Array.isArray(resumeId) && (resumeId = resumeId[0]);
+   //       console.log(resumeId);
+   //       const stringData = localStorage.getItem(resumeId);
+
+   //       if (stringData) {
+   //          console.log('hello3');
+   //          const data = JSON.parse(stringData) as LocalStorageData;
+   //          console.log(data);
+   //          // populate data
+   //          setFname(data.fname);
+   //          setLname(data.lname);
+   //          setEmail(data.email);
+   //          setMobile(data.mobile);
+   //          setTitle(data.title);
+   //          setWebsite(data.website);
+   //       }
+   //    }
+   // }, [resumeId]);
 
    const [isOpen, setIsOpen] = useState(false);
 
@@ -35,73 +68,91 @@ const PersonalInformation: React.FC = () => {
             isOpen={isOpen}
             toggleOpen={toggleOpen}
          />
-         {/* <div
-                onClick={() => {
-                    setIsOpen(!isOpen);
-                }}
-                className="flex cursor-pointer px-4 py-3"
-            >
-                <p className="w-8">{isOpen ? 'O' : 'C'}</p>
-                <p>Personal informaton</p>
-            </div> */}
-         {isOpen && (
-            <div className="px-4 pb-5">
-               <InputFlex>
-                  <Input
+         <div className={`px-4 pb-4 ${isOpen ? 'block' : 'hidden'}`}>
+            <div className="flex gap-x-4 mb-3">
+               <div className="w-1/2">
+                  <label htmlFor="fname">Firstname</label>
+                  <br />
+                  <input
                      type="text"
-                     holder="Firstname"
+                     id="fname"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={fname}
                      onChange={e => {
                         setFname(e.target.value);
                      }}
                   />
-                  <Input
+               </div>
+               <div className="w-1/2">
+                  <label htmlFor="lname">Lastname</label>
+                  <input
                      type="text"
-                     holder="Lastname"
+                     id="lname"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={lname}
                      onChange={e => {
                         setLname(e.target.value);
                      }}
                   />
-               </InputFlex>
-               <InputFlex>
-                  <Input
+               </div>
+            </div>
+            <div className="flex gap-x-4 mb-3">
+               <div className="w-1/2">
+                  <label htmlFor="email">Email Address</label>
+                  <input
                      type="email"
-                     holder="Email adress"
+                     id="email"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={email}
                      onChange={e => {
                         setEmail(e.target.value);
+                        // syncStorage();
                      }}
                   />
-                  <Input
-                     type="number"
-                     holder="Mobile Number"
+               </div>
+               <div className="w-1/2">
+                  <label htmlFor="mobile">Mobile Number</label>
+                  <input
+                     type="text"
+                     id="mobile"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={mobile}
                      onChange={e => {
                         setMobile(e.target.value);
+                        // syncStorage();
                      }}
                   />
-               </InputFlex>
-               <InputFlex>
-                  <Input
+               </div>
+            </div>
+            <div className="flex gap-x-4 mb-1">
+               <div className="w-1/2">
+                  <label htmlFor="title">Title</label>
+                  <input
                      type="text"
-                     holder="Title"
+                     id="title"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={title}
                      onChange={e => {
                         setTitle(e.target.value);
+                        // syncStorage();
                      }}
                   />
-                  <Input
+               </div>
+               <div className="w-1/2">
+                  <label htmlFor="website">Website</label>
+                  <input
                      type="text"
-                     holder="Personal website"
+                     id="website"
+                     className="w-full py-1 px-2 rounded-md bg-gray-100"
                      value={website}
                      onChange={e => {
                         setWebsite(e.target.value);
+                        // syncStorage();
                      }}
                   />
-               </InputFlex>
+               </div>
             </div>
-         )}
+         </div>
       </div>
    );
 };

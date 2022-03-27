@@ -6,7 +6,7 @@ import { DataContextType } from '@/types/data';
 import { DataContext } from 'context/DataContext';
 
 const ObjectiveInformation: React.FC = () => {
-   const { objective, setObjective } = React.useContext(
+   const { objective, setObjective, syncStorage } = React.useContext(
       DataContext
    ) as DataContextType;
 
@@ -26,13 +26,14 @@ const ObjectiveInformation: React.FC = () => {
             <div className={`px-4 pb-4 ${isOpen ? 'block' : 'hidden'}`}>
                <div>
                   <textarea
-                     name=""
-                     id=""
-                     cols={30}
+                     value={objective}
                      rows={5}
                      className="bg-gray-200 rounded-md w-full p-2 text-lg"
                      placeholder="Objective"
-                     onChange={e => setObjective(e.target.value)}
+                     onChange={e => {
+                        setObjective(e.target.value);
+                        syncStorage();
+                     }}
                   ></textarea>
                </div>
             </div>

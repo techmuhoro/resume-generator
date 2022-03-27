@@ -12,11 +12,11 @@ import { DataContext } from 'context/DataContext';
 
 const RefereesInformation: React.FC = () => {
    const value = React.useContext(DataContext) as DataContextType;
-   const { refereesList, setRefereesList } = value;
+   const { refereesList, setRefereesList, syncStorage } = value;
 
    const [isOpen, setIsOpen] = React.useState(false);
    const [showAddForm, setShowAddForm] = React.useState(false);
-   const [editMode, setEditMode] = React.useState(true);
+   const [editMode, setEditMode] = React.useState(false);
    const [editedReferreId, setEditedRefereeId] = React.useState('');
    // const [refereesList, setRefereesList] = React.useState<Referee[]>([]);
    const [refereeName, setRefereeName] = React.useState('');
@@ -28,6 +28,11 @@ const RefereesInformation: React.FC = () => {
    const titleRef = React.useRef<HTMLInputElement | null>(null);
    const mobileRef = React.useRef<HTMLInputElement | null>(null);
    const emailRef = React.useRef<HTMLInputElement | null>(null);
+
+   React.useEffect(() => {
+      // update local storage with an new copy of referee's list
+      syncStorage();
+   }, [refereesList]);
 
    const toggleOpen = () => setIsOpen(!isOpen);
    const openForm = () => setShowAddForm(true);

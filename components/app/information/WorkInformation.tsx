@@ -11,7 +11,7 @@ import { DataContext } from 'context/DataContext';
 import { v4 as uuid } from 'uuid';
 
 const WorkInformation: React.FC = () => {
-   const { workList, setWorkList } = React.useContext(
+   const { workList, setWorkList, syncStorage } = React.useContext(
       DataContext
    ) as DataContextType;
 
@@ -19,10 +19,18 @@ const WorkInformation: React.FC = () => {
    const [showAddForm, setShowAddForm] = React.useState(false);
    const [editMode, setEditMode] = React.useState(false);
    const [editedWorkId, setEditedWorkId] = React.useState('');
+
+   // inputs
    const [companyName, setCompanyName] = React.useState('');
    const [position, setPosition] = React.useState('');
+   const [description, setDescription] = React.useState('');
    const [startDate, setStartDate] = React.useState('');
    const [endDate, setEndDate] = React.useState('');
+
+   React.useEffect(() => {
+      // update the local storage when worklist changes
+      syncStorage();
+   }, [workList]);
 
    const toggleOpen = () => setIsOpen(!isOpen);
    const openForm = () => setShowAddForm(true);
@@ -31,6 +39,7 @@ const WorkInformation: React.FC = () => {
    const clearFields = () => {
       setCompanyName('');
       setPosition('');
+      setDescription('');
       setStartDate('');
       setEndDate('');
    };
@@ -51,6 +60,7 @@ const WorkInformation: React.FC = () => {
             id: uuid().slice(0, 8),
             company: companyName.trim(),
             postion: position.trim(),
+            description: description.trim(),
             startDate: startDate.trim(),
             endDate: endDate.trim(),
          };
@@ -74,6 +84,7 @@ const WorkInformation: React.FC = () => {
          // populate the fields
          setCompanyName(selectedWork.company);
          setPosition(selectedWork.postion);
+         setDescription(selectedWork.description);
          setStartDate(selectedWork.startDate);
          setEndDate(selectedWork.endDate);
          setEditedWorkId(selectedWork.id.trim());
@@ -91,6 +102,7 @@ const WorkInformation: React.FC = () => {
             if (work.id === editedWorkId) {
                work.company = companyName.trim();
                work.postion = position.trim();
+               work.description = description.trim();
                work.startDate = startDate.trim();
                work.endDate = endDate.trim();
             }
@@ -115,8 +127,8 @@ const WorkInformation: React.FC = () => {
             <div className="mb-4 flex gap-x-[3.5%] gap-y-3 flex-wrap">
                {workList.map(work => (
                   <div className="bg-gray-200 w-[48%] flex items-center py-2 px-2 rounded-[5px]">
-                     <div>
-                        <p>{work.company}</p>
+                     <div className="w-[80%]">
+                        <p className="truncate">{work.company}</p>
                      </div>
                      <div className="ml-auto flex ">
                         <button onClick={() => removeWork(work.id)}>
@@ -157,6 +169,19 @@ const WorkInformation: React.FC = () => {
                      value={position}
                      onChange={e => setPosition(e.target.value)}
                   />
+               </div>
+               <div className="mb-2">
+                  <label htmlFor="description">
+                     <span>Description</span> <span>(Optional)</span>
+                  </label>
+                  <br />
+                  <textarea
+                     className="w-full bg-gray-200 py-1.5 px-2 rounded-[5px]"
+                     id="description"
+                     rows={4}
+                     value={description}
+                     onChange={e => setDescription(e.target.value)}
+                  ></textarea>
                </div>
                <div className="flex gap-x-2">
                   <div className="w-1/2">
@@ -216,6 +241,14 @@ const WorkInformation: React.FC = () => {
                      </>
                   )}
                </button>
+               {showAddForm && (
+                  <p
+                     onClick={hardReset}
+                     className="ml-2 text-blue-500 cursor-pointer"
+                  >
+                     Cancel
+                  </p>
+               )}
             </div>
          </div>
       </div>

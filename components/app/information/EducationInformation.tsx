@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
 import { DataContext } from 'context/DataContext';
 
 const EducationInformation: React.FC = () => {
-   const { educationList, setEducationList } = React.useContext(
+   const { educationList, setEducationList, syncStorage } = React.useContext(
       DataContext
    ) as DataContextType;
 
@@ -28,6 +28,12 @@ const EducationInformation: React.FC = () => {
    const [grade, setGrade] = React.useState('');
    const [startDate, setStartDate] = React.useState('');
    const [endDate, setEndDate] = React.useState('');
+
+   // for updating the local storage
+   React.useEffect(() => {
+      // update the local storage when the education list changes
+      syncStorage();
+   }, [educationList]);
 
    const toggleOpen = () => setIsOpen(!isOpen);
    const openForm = () => setShowAddForm(true);

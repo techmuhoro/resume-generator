@@ -21,9 +21,14 @@ const ProjectsInformation: React.FC = () => {
 
    // context
    const value = React.useContext(DataContext);
-   const { projectsList, setProjectList } = value as DataContextType;
+   const { projectsList, setProjectList, syncStorage } =
+      value as DataContextType;
    // const [projectsList, setProjectList] = React.useState<Project[]>([]);
 
+   React.useEffect(() => {
+      // update the local storage when project list changes
+      syncStorage();
+   }, [projectsList]);
    // helper function
    const toggleOpen = () => setIsOpen(!isOpen);
    const openProjectForm = () => setShowProjectForm(true);
@@ -36,10 +41,7 @@ const ProjectsInformation: React.FC = () => {
    };
 
    const saveProject = () => {
-      const condition =
-         name.trim().length > 1 &&
-         url.trim().length > 1 &&
-         description.trim().length > 1;
+      const condition = name.trim().length > 1 && url.trim().length > 1;
 
       if (condition) {
          const newProject: Project = {
@@ -113,8 +115,8 @@ const ProjectsInformation: React.FC = () => {
                   <div className="mb-4 flex gap-x-[3.5%] gap-y-3 flex-wrap">
                      {projectsList.map(p => (
                         <div className="bg-gray-200 w-[48%] flex items-center py-2 px-2 rounded-[5px]">
-                           <div>
-                              <p>{p.name}</p>
+                           <div className="w-[80%]">
+                              <p className="truncate">{p.name}</p>
                            </div>
                            <div className="ml-auto flex ">
                               <button onClick={() => removeProject(p.id)}>

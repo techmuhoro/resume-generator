@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid';
 import { DataContext } from 'context/DataContext';
 
 const SkillsInformation: React.FC = () => {
-   const { skillsList, setSkillsList } = React.useContext(
+   const { skillsList, setSkillsList, syncStorage } = React.useContext(
       DataContext
    ) as DataContextType;
 
@@ -24,6 +24,10 @@ const SkillsInformation: React.FC = () => {
    const [editedSkillId, setEditedSkillId] = React.useState('');
 
    const levelRef = React.useRef<HTMLInputElement | null>(null);
+
+   React.useEffect(() => {
+      syncStorage();
+   }, [skillsList]);
 
    // helper functions
    const toggleOpen = () => setIsOpen(!isOpen);

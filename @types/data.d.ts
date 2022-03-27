@@ -27,6 +27,7 @@ export type Work = {
    id: string;
    company: string;
    postion: string;
+   description: string;
    startDate: string;
    endDate: string;
 };
@@ -69,4 +70,22 @@ export type DataContextType = {
    setWorkList: React.Dispatch<React.SetStateAction<Work[]>>;
    socialList: SocialMedia[];
    setSocialList: React.Dispatch<React.SetStateAction<SocialMedia[]>>;
+   syncStorage: () => void;
+};
+
+export type LocalStorageData = {
+   objective: string;
+   fname: string;
+   lname: string;
+   email: string;
+   mobile: string;
+   title: string;
+   website: string;
+   hobbiesList: string[];
+   projectsList: Project[];
+   refereesList: Referee[];
+   educationList: Education[];
+   skillsList: Skill[];
+   workList: Work[];
+   socialList: SocialMedia[];
 };
